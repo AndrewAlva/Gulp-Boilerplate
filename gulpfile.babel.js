@@ -40,7 +40,7 @@ const postCssPlugins = [
 
 //Tarea para convertir el sass a css y adicional agrega los prefix para los navegadores.
 gulp.task('stylesDev', ()=>{
-    return gulp.src('./dev/scss/main.scss')
+    return gulp.src('./dev/scss/app.scss')
         .pipe(plumber())
         .pipe(sass(sassOptionsDev))
         .pipe(gulp.dest('./public/css'))
@@ -48,18 +48,18 @@ gulp.task('stylesDev', ()=>{
 })
 
 gulp.task('stylesProd', ()=>{
-    return gulp.src('./dev/scss/main.scss')
+    return gulp.src('./dev/scss/app.scss')
         .pipe(plumber())
         .pipe(sass(sassOptionsProd))
         .pipe(postcss(postCssPlugins))
-        .pipe(concat("main-min.css"))
+        .pipe(concat("app.min.css"))
         .pipe(gulp.dest('./public/css'))
         .pipe(server.stream())
 });
 
 //Tarea para pug - los pasa a html
 gulp.task('pug', ()=>{
-	return gulp.src('./dev/pug/*.pug')
+	return gulp.src('./dev/assets/*.pug')
     .pipe(plumber())
 	.pipe(pug({
 		pretty:true // Cambiar a "false" para minifizar código.
@@ -86,8 +86,21 @@ gulp.task('default', ()=>{
 	})
 
     production
-        ? gulp.watch('./dev/scss/main.scss', gulp.series('stylesProd'))
-        : gulp.watch('./dev/scss/main.scss', gulp.series('stylesDev'))
-    gulp.watch('./dev/pug/*.pug', gulp.series('pug')).on('change', server.reload)
+        ? gulp.watch('./dev/scss/**', gulp.series('stylesProd'))
+        : gulp.watch('./dev/scss/**', gulp.series('stylesDev'))
+
+    gulp.watch('./dev/assets/*.pug', gulp.series('pug')).on('change', server.reload)
+    gulp.watch('./dev/assets/**/*.pug', gulp.series('pug')).on('change', server.reload)
     gulp.watch('./dev/js/*.js', gulp.series('babel')).on('change', server.reload)
 })
+
+
+
+
+
+
+
+
+
+
+
