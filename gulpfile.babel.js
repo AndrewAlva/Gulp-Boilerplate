@@ -52,7 +52,7 @@ gulp.task('stylesProd', ()=>{
         .pipe(plumber())
         .pipe(sass(sassOptionsProd))
         .pipe(postcss(postCssPlugins))
-        .pipe(concat("app.min.css"))
+        .pipe(concat("app.css"))
         .pipe(gulp.dest('./public/css'))
         .pipe(server.stream())
 });
@@ -62,13 +62,31 @@ gulp.task('pug', ()=>{
 	return gulp.src('./dev/assets/*.pug')
     .pipe(plumber())
 	.pipe(pug({
-		pretty:true // Cambiar a "false" para minifizar código.
+		pretty:true
 	}))
 	.pipe(gulp.dest('./public/'))
 })
 
-//Tarea para compilar se6 para todos los navegadores, crea un solo script y ofusca el código.
+//Tarea para pug minificado - los pasa a html
+gulp.task('pug-min', ()=>{
+    return gulp.src('./dev/assets/*.pug')
+    .pipe(plumber())
+    .pipe(pug())
+    .pipe(gulp.dest('./public/'))
+})
+
+//Tarea para compilar es6 para todos los navegadores, crea un solo script y ofusca el código.
 gulp.task('babel', ()=>{
+    return gulp.src('./dev/js/*.js')
+    .pipe(plumber())
+    .pipe(babel({
+        presets:['env']
+    }))
+    .pipe(gulp.dest('./public/js'))
+})
+
+//Tarea para compilar es6 para todos los navegadores, crea un solo script y ofusca el código.
+gulp.task('babel-min', ()=>{
     return gulp.src('./dev/js/*.js')
     .pipe(plumber())
     .pipe(babel({
@@ -112,4 +130,10 @@ gulp.task('server', ()=>{
 })
 
 
+// Tarea general para crear la carpeta "public" y levantar el servidor general con un watch activo
 gulp.task('default', gulp.series('pug', 'stylesDev', 'babel', 'images', 'fonts', 'server') )
+
+
+// Tarea para exportar los archivos minificados listos para subir a servidor
+gulp.task('build', gulp.series('pug-min', 'stylesProd', 'babel-min', 'images', 'fonts') )
+

@@ -54,4 +54,4 @@ Cuando termines el proyecto y quieras obtener los archivos finales de producció
 foo@bar:~$ gulp build
 ```
 
-This builds minified files ready to upload to server.
+Esto crea los archivos minificados listos para subir al servidor.
