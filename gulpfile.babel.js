@@ -79,8 +79,23 @@ gulp.task('babel', ()=>{
     .pipe(gulp.dest('./public/js'))
 })
 
-//Tarea para levantar un servidor
-gulp.task('default', ()=>{
+// Tarea para exportar imagenes de "dev" a "public"
+gulp.task('images', function(){
+  return gulp.src('./dev/assets/img/*.+(png|jpg|gif|svg)')
+  .pipe(gulp.dest('./public/img'))
+});
+
+// Tarea para exportar fuentes de "dev" a "public"
+gulp.task('fonts', function(){
+  return gulp.src('./dev/assets/fonts/**')
+  .pipe(gulp.dest('./public/fonts'))
+});
+
+
+//Tarea para levantar un servidor local y un watch general
+gulp.task('server', ()=>{
+    console.log('running server');
+
 	server.init({
 		server: './public'
 	})
@@ -92,15 +107,9 @@ gulp.task('default', ()=>{
     gulp.watch('./dev/assets/*.pug', gulp.series('pug')).on('change', server.reload)
     gulp.watch('./dev/assets/**/*.pug', gulp.series('pug')).on('change', server.reload)
     gulp.watch('./dev/js/*.js', gulp.series('babel')).on('change', server.reload)
+    gulp.watch('./dev/assets/img/**', gulp.series('images'))
+    gulp.watch('./dev/assets/fonts/**', gulp.series('fonts'))
 })
 
 
-
-
-
-
-
-
-
-
-
+gulp.task('default', gulp.series('pug', 'stylesDev', 'babel', 'images', 'fonts', 'server') )

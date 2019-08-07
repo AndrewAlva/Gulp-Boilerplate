@@ -1,1 +1,0 @@
-"use strict";var number=5,numbers=[1,2,3,4,5,6],sum=numbers.reduce(function(e,s){return e+s});console.log(sum),console.log("Este es el archivo doss");

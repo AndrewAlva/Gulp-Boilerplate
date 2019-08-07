@@ -60,5 +60,8 @@ typings/
 # next.js build output
 .next
 
+# output folder
+/public
+
 # Mac trash files
 .DS_Store
